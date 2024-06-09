@@ -33,9 +33,12 @@ public class AlertGenerator {
      * will be triggered.
      *
      * @param patient the patient data to evaluate for alert conditions
+     * @return
      */
-    public void evaluateData(Patient patient) {
-        // Implementation goes here
+    public Alert evaluateData(Patient patient) {
+        String condition = "High Blood Pressure"; // This would be determined by the evaluation logic
+        Alert alert = new Alert(Integer.toString(patientRecord.getPatientId()), condition, getTimestamp.now());
+        return alert;
     }
 
     /**
@@ -47,6 +50,6 @@ public class AlertGenerator {
      * @param alert the alert object containing details about the alert condition
      */
     private void triggerAlert(Alert alert) {
-        // Implementation might involve logging the alert or notifying staff
+        System.out.println("Alert triggered for patient " + alert.getPatientId() + ": " + alert.getCondition());
     }
 }
