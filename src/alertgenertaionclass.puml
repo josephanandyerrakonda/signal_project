@@ -1,0 +1,112 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package com.alerts {
+    class Alert {
+        - patientId: String
+        - condition: String
+        - timestamp: LocalDateTime
+        + Alert(String, String, LocalDateTime)
+        + getPatientId(): String
+        + setPatientId(String)
+        + getCondition(): String
+        + setCondition(String)
+        + getTimestamp(): LocalDateTime
+        + setTimestamp(LocalDateTime)
+    }
+}
+
+package com.cardio_generator.generators {
+    class AlertGenerator {
+        + evaluateData(PatientData): Alert
+        + triggerAlert(Alert)
+    }
+
+    class AlertManager {
+        + handleAlert(Alert)
+    }
+}
+
+package com.data_management {
+    class PatientData {
+        - patientId: String
+        - metrics: Map<String, Object>
+        - timestamp: LocalDateTime
+        + PatientData(String, Map<String, Object>, LocalDateTime)
+        + getPatientId(): String
+        + setPatientId(String)
+        + getMetrics(): Map<String, Object>
+        + setMetrics(Map<String, Object>)
+        + getTimestamp(): LocalDateTime
+        + setTimestamp(LocalDateTime)
+    }
+
+    class DataStorage {
+        - storage: Map<String, PatientData>
+        + storeData(PatientData)
+        + retrieveData(String): PatientData
+        + deleteData(String)
+    }
+
+    class DataRetriever {
+        - dataStorage: DataStorage
+        + DataRetriever(DataStorage)
+        + getData(String): PatientData
+    }
+
+    class PatientIdentifier {
+        - dataStorage: DataStorage
+        + PatientIdentifier(DataStorage)
+        + matchPatientId(String): PatientRecord
+    }
+
+    class IdentityManager {
+        - patientIdentifier: PatientIdentifier
+        + IdentityManager(PatientIdentifier)
+        + getPatientRecord(String): PatientRecord
+    }
+
+    class PatientRecord {
+        - patientId: String
+        - name: String
+        - dateOfBirth: String
+        - medicalHistory: List<String>
+        + PatientRecord(String, String, String, List<String>)
+        + getPatientId(): String
+        + setPatientId(String)
+        + getName(): String
+        + setName(String)
+        + getDateOfBirth(): String
+        + setDateOfBirth(String)
+        + getMedicalHistory(): List<String>
+        + setMedicalHistory(List<String>)
+    }
+
+    class DataListener {
+        + listen()
+    }
+
+    class DataParser {
+        + parse(String): PatientData
+    }
+
+    class DataSourceAdapter {
+        - dataListener: DataListener
+        - dataParser: DataParser
+        - dataStorage: DataStorage
+        + DataSourceAdapter(DataListener, DataParser, DataStorage)
+        + processData()
+    }
+
+
+AlertGenerator --> Alert
+AlertGenerator --> AlertManager
+DataRetriever --> DataStorage
+PatientIdentifier --> DataStorage
+IdentityManager --> PatientIdentifier
+DataSourceAdapter --> DataListener
+DataSourceAdapter --> DataParser
+DataSourceAdapter --> DataStorage
+@enduml
+
+
